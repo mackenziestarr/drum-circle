@@ -1,0 +1,25 @@
+<html>
+  <head>
+    <title>global village drum circle</title>
+    <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/p5.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/addons/p5.dom.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.5.8/addons/p5.sound.min.js"></script>
+    <script src="sketch.js"></script>
+    <script src="sampler.js"></script>
+    <script>
+     var socket = io.connect('http://localhost:3000');
+     socket.on('client-connected', function (data) {
+       var el = document.createElement('i');
+       el.className += 'em em-angry';
+       document.body.insertBefore(el, document.body.firstChild);
+     });
+     socket.on('trig', function (data) {
+       play();
+     });
+    </script>
+  </body>
+</html>

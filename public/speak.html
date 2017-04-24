@@ -1,0 +1,17 @@
+<html>
+  <head>
+    <title>global village drum circle</title>
+    <style type="text/css">
+      body { outline: 1px solid red; }
+    </style>
+  </head>
+  <body>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+     var socket = io.connect('192.168.59.180:3000');
+     document.body.addEventListener('touchstart', function(e) {
+       socket.emit('speak', {some:'data'});
+     });
+    </script>
+  </body>
+</html>
