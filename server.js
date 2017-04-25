@@ -6,10 +6,31 @@ var path =  require("path");
 
 server.listen(3000);
 
+var clients = [];
+var emoji  = ['100', 'apple'];
+var sounds = ['snare', 'hat'];
+
 io.on('connection', function (socket) {
-    socket.broadcast.emit('client-connected');
-    socket.on('speak', function (data) {
-        io.emit('trig', data);
+    // keep track of connection
+    var id = socket.conn.id;
+
+    clients[id] = {
+        id : id,
+        // maybe change this
+        emoji : emoji[Math.floor(Math.random() * emoji.length)],
+        sound : 'hat'
+    };
+
+    socket.broadcast.emit('client-connected', clients[id]);
+
+    socket.on('speak', function () {
+        io.emit('trig', clients[id]);
+    });
+
+    socket.on('disconnect', function (data) {
+        emoji.push(clients[id].emoji);
+        sounds.push(clients[id].sound);
+        socket.broadcast.emit('client-disconnected', clients[id]);
     });
 });
 
