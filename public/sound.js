@@ -5,10 +5,45 @@ var sounds = {
     'hat'   : loadSoundFile('hat')
 };
 
-function playSound(type) {
+
+var analyser = context.createAnalyser();
+analyser.smoothingTimeConstant = 0.3;
+analyser.fftSize = 1024;
+// 21 times a second
+var node = context.createScriptProcessor(2048, 1, 1);
+node.onaudioprocess = function getAverageSignalLevel(id) {
+    // get the average, bincount is fftsize / 2
+    var amplitudes =  new Uint8Array(analyser.frequencyBinCount);
+    analyser.getByteFrequencyData(amplitudes);
+
+    // sum amplitudes
+    var amplitude = amplitudes.reduce(function sum(a, b) {
+        return a + b;
+    }, 0);
+    getSoundLevel(id, Math.floor(amplitude / amplitudes.length));
+}
+
+function playSound(type, id) {
     var source = context.createBufferSource();
-    source.buffer = sounds[type];
+
+    source.connect(analyser);
+    analyser.connect(node);
+    node.connect(context.destination);
     source.connect(context.destination);
+
+    node.onaudioprocess = function getAverageSignalLevel() {
+        // get the average, bincount is fftsize / 2
+        var amplitudes =  new Uint8Array(analyser.frequencyBinCount);
+        analyser.getByteFrequencyData(amplitudes);
+
+        // sum amplitudes
+        var amplitude = amplitudes.reduce(function sum(a, b) {
+            return a + b;
+        }, 0);
+        getSoundLevel(id, Math.floor(amplitude / amplitudes.length));
+    }
+
+    source.buffer = sounds[type];
     source.start(0);
 }
 
