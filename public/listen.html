@@ -2,37 +2,19 @@
   <head>
     <title>global village drum circle</title>
     <link href="https://afeld.github.io/emoji-css/emoji.css" rel="stylesheet">
-    <style>
-      body {
-       background-color: #ffecb3;
-       margin: 100px auto;
-     }
-     div {
-       display: inline-block;
-       background-color: #ffffe5;
-       border-radius: 100%;
-       border: solid 1px #cbba83;
-       width: 100px;
-       height: 100px;
-     }
-    </style>
+    <link rel="stylesheet" type="text/css" href="listen.css">
   </head>
-  <body>
-    <div id="ball"></div>
+  <body class="flex">
     <script src="/socket.io/socket.io.js"></script>
     <script src="sound.js"></script>
     <script src="animation.js"></script>
     <script>
      var socket = io.connect('http://localhost:3000');
 
-     document.addEventListener('keydown', function (e) {
-       playSound('snare', 'ball');
-     });
-
      socket.on('client-connected', function (data) {
        var el = document.createElement('div');
        el.id = data.id;
-       //el.className += 'em em-' + data.emoji;
+       el.className += 'em em-' + data.emoji
        document.body.insertBefore(el, document.body.firstChild);
      });
 
@@ -43,10 +25,7 @@
 
      socket.on('trig', function (data) {
        var el = document.getElementById(data.id);
-       var size = (Math.floor(Math.random() * 72)) + 'px';
-       el.style.height = size;
-       el.style.width = size;
-       playSound(data.sound, data.id);
+       playSound(data.sound, el);
      });
 
     </script>

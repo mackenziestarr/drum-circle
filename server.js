@@ -7,8 +7,8 @@ var path =  require("path");
 server.listen(3000);
 
 var clients = [];
-var emoji  = ['100', 'apple'];
-var sounds = ['snare', 'hat'];
+var emoji  = ['100', 'apple', 'angry'];
+var sounds = ['snare', 'hat', 'bass'];
 
 io.on('connection', function (socket) {
     // keep track of connection
@@ -16,9 +16,8 @@ io.on('connection', function (socket) {
 
     clients[id] = {
         id : id,
-        // maybe change this
-        emoji : emoji[Math.floor(Math.random() * emoji.length)],
-        sound : 'hat'
+        emoji : emoji.pop(),
+        sound : sounds.pop()
     };
 
     socket.broadcast.emit('client-connected', clients[id]);

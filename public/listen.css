@@ -1,0 +1,21 @@
+body {
+  background-color: #ffecb3;
+  margin: 0 auto;
+}
+.flex {
+  /* basic styling */
+  width: 100%;
+  height: 100%;
+  justify-content: space-around;
+  align-items: center;
+  /* flexbox setup */
+  display: flex;
+  flex-direction: row;
+}
+.flex > div {
+  font-size: 4em;
+  width: 75px; /* To make the transition work nicely. (Transitions to/from
+                    "width:auto" are buggy in Gecko and Webkit, at least.
+                    See http://bugzil.la/731886 for more info.) */
+  transition: width 0.7s ease-out;
+}

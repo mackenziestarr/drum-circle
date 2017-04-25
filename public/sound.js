@@ -23,7 +23,7 @@ node.onaudioprocess = function getAverageSignalLevel(id) {
     getSoundLevel(id, Math.floor(amplitude / amplitudes.length));
 }
 
-function playSound(type, id) {
+function playSound(type, el) {
     var source = context.createBufferSource();
 
     source.connect(analyser);
@@ -40,7 +40,7 @@ function playSound(type, id) {
         var amplitude = amplitudes.reduce(function sum(a, b) {
             return a + b;
         }, 0);
-        getSoundLevel(id, Math.floor(amplitude / amplitudes.length));
+        getSoundLevel(el, Math.floor(amplitude / amplitudes.length));
     }
 
     source.buffer = sounds[type];
